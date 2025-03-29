@@ -3,19 +3,21 @@
 status_t pwm_init(
     pwm_t *object, 
     TIM_HandleTypeDef *timer, 
-    uint8_t channel, 
+    uint32_t channel, 
     GPIO_TypeDef *group, uint16_t pin,
     uint8_t is_inverted_signal)
 {
     VALUE_CAN_BE_NULL(object);
     VALUE_CAN_BE_NULL(timer);
     VALUE_CAN_BE_NULL(group);
-    assert_param(channel == 0);
+    assert_param(IS_TIM_CCX_INSTANCE(timer->Instance, channel));
 
     object->arr = (uint32_t *)&timer->Instance->ARR;
-    object->channel = (uint32_t *)(&timer->Instance->CCR1 + (0x1 * --channel));
+    object->channel = (uint32_t *)(&timer->Instance->CCR1 + channel);
     object->port = group;
     object->dir_pin = pin;
+
+    HAL_TIM_PWM_Start(timer, channel);
 
     if(is_inverted_signal != 0) object->is_inverted_signal = 1; 
     else object->is_inverted_signal = 0;

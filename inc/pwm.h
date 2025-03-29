@@ -7,6 +7,8 @@
 #include "stm32f4xx_hal.h"
 #elif defined(STM32F103xx)
 #include "stm32f1xx_hal.h"
+#elif defined(STM32G491xx)
+#include "stm32g4xx_hal.h"
 #endif
 
 typedef struct {
@@ -50,7 +52,7 @@ typedef enum {
 status_t pwm_init(
     pwm_t *object, 
     TIM_HandleTypeDef *timer, 
-    uint8_t channel, 
+    uint32_t channel, 
     GPIO_TypeDef *group, uint16_t pin,
     uint8_t is_inverted_signal);
 
